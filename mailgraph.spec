@@ -17,6 +17,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
 Patch0:		%{name}-paths.patch
+Patch1:		%{name}-postfix_rbl.patch
 URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
@@ -45,6 +46,7 @@ poczty wys³anej/odebranej i odbitej/odrzuconej.
 %prep
 %setup	-q
 %patch0 -p1
+%patch1 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
