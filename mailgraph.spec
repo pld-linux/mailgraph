@@ -7,12 +7,12 @@
 Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
-Version:	1.4
+Version:	1.6
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
-# Source0-md5:	ebf03bab72e0f978f6cfbd23ea200699
+# Source0-md5:	d10c65089e82fb9bacf6a0d34514df5e
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
@@ -24,6 +24,7 @@ Requires(post,preun):	grep
 Requires(preun):	fileutils
 Requires:	postfix
 Requires:	apache-mod_expires
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir		/var/lib/%{name}
