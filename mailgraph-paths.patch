@@ -1,0 +1,42 @@
+diff -urN mailgraph-0.17/mailgraph.cgi mailgraph-0.17.dzikus/mailgraph.cgi
+--- mailgraph-0.17/mailgraph.cgi	Wed Nov  7 15:18:12 2001
++++ mailgraph-0.17.dzikus/mailgraph.cgi	Wed Nov 28 14:58:36 2001
+@@ -14,7 +14,7 @@
+ my $ypoints_err = 80;
+ my $imgs_dir = 'imgs'; # where to store the images
+ my $imgs_url = 'imgs'; # where to reference the images in HTML (<IMG> tag)
+-my $rrd = 'mailgraph.rrd';
++my $rrd = '/var/lib/mailgraph/mailgraph.rrd';
+ 
+ BEGIN {
+     print "Content-Type: text/html\n\n";
+diff -urN mailgraph-0.17/mailgraph.pl mailgraph-0.17.dzikus/mailgraph.pl
+--- mailgraph-0.17/mailgraph.pl	Wed Nov  7 15:15:45 2001
++++ mailgraph-0.17.dzikus/mailgraph.pl	Wed Nov 28 14:41:02 2001
+@@ -189,7 +189,7 @@
+ 
+ # global variables
+ my $logfile;
+-my $rrd = "mailgraph.rrd";
++my $rrd = "/var/lib/mailgraph/mailgraph.rrd";
+ my $year;
+ my $this_minute;
+ my %sum = ( sent => 0, received => 0, bounced => 0, rejected => 0 );
+@@ -208,7 +208,7 @@
+ {
+ 	print "usage: mailgraph [*options*]\n\n";
+ 	print "  -c, --cat          causes the logfile to be only read and not monitored\n";
+-	print "  -l, --logfile f    monitor logfile f instead of /var/log/syslog\n";
++	print "  -l, --logfile f    monitor logfile f instead of /var/log/maillog\n";
+ 	print "  -h, --help         display this help and exit\n";
+ 	print "  -v, --version      output version information and exit\n";
+ 
+@@ -226,7 +226,7 @@
+ 		exit;
+ 	}
+ 
+-	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/syslog';
++	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/maillog';
+ 	my $file;
+ 	if($opt{cat}) {
+ 		$file = $logfile;
