@@ -7,12 +7,12 @@
 Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
-Version:	1.6
+Version:	1.8
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
-# Source0-md5:	d10c65089e82fb9bacf6a0d34514df5e
+# Source0-md5:	f06cf84a49479529e9d280e78b7b34a9
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
@@ -29,7 +29,7 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir		/var/lib/%{name}
-%define		_httpappsdir		%{_libdir}/httpd/apps
+%define		_httpappsdir		%{_datadir}/%{name}
 
 %define		_appdefaultconfMD5	%(md5sum %{SOURCE3})
 
@@ -51,9 +51,9 @@ poczty wys³anej/odebranej i odbitej/odrzuconej.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,httpd},%{_bindir}} \
-	$RPM_BUILD_ROOT{%{_httpappsdir}/mailgraph,%{_pkglibdir}}
+	$RPM_BUILD_ROOT{%{_httpappsdir},%{_pkglibdir}}
 
-install mailgraph.cgi $RPM_BUILD_ROOT%{_httpappsdir}/mailgraph/index.cgi
+install mailgraph.cgi $RPM_BUILD_ROOT%{_httpappsdir}/index.cgi
 install mailgraph.pl $RPM_BUILD_ROOT%{_bindir}/mailgraph.pl
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
@@ -100,6 +100,6 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/mailgraph
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/mailgraph
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/httpd/mailgraph.conf
-%dir %{_httpappsdir}/mailgraph
-%attr(755,root,root) %{_httpappsdir}/mailgraph/index.cgi
+%dir %{_httpappsdir}
+%attr(755,root,root) %{_httpappsdir}/index.cgi
 %attr(750,root,http) %dir %{_pkglibdir}
