@@ -9,56 +9,46 @@
 # Source function library.
 . /etc/rc.d/init.d/functions
 
+# Get service config
+[ -f /etc/sysconfig/mailgraph ] && . /etc/sysconfig/mailgraph
+
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/mailgraph ]; then
-		msg_starting "mailgraph"
-		busy
-		/usr/bin/mailgraph.pl >/dev/null 2>&1 &
-		sleep 1
-		ps -C mailgraph >/dev/null 2>&1
+		msg_starting mailgraph
+		daemon /usr/bin/mailgraph.pl -d \
+			$([ -n "$MAILLOG_FILE" ] && echo -l $MAILLOG_FILE ) 2>&1
 		RETVAL=$?
-		CPID=$!
-		if [ $RETVAL -eq 0 ]; then
-			touch /var/lock/subsys/mailgraph
-			echo $CPID >/var/run/mailgraph.pid
-			deltext; ok;
-		else
-			deltext; fail;
-		fi
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/mailgraph
 	else
-		msg_already_running "mailgraph"
-		exit 1
+		msg_already_running atd
 	fi
-
-        ;;
+	;;
   stop)
-        if [ -f /var/lock/subsys/mailgraph ]; then
-        	msg_stopping "mailgraph"
-		#busy
-        	killproc mailgraph
-		#deltext; ok;
-        	rm -f /var/lock/subsys/mailgraph >/dev/null 2>&1
-        	rm -f /var/run/mailgraph.pid >/dev/null 2>&1
-        else
-	        msg_not_running "mailgraph"
-                exit 1
-        fi
+	if [ -f /var/lock/subsys/mailgraph ]; then
+		msg_stopping "mailgraph"
+		killproc mailgraph
+		rm -f /var/lock/subsys/mailgraph /var/run/mailgraph.pid >/dev/null 2>&1
+	else
+		msg_not_running "mailgraph"
+	fi
 															
-        ;;
+	;;
   status)
   	status mailgraph
 	exit $?
 	;;
-  restart)
+  restart|force-reload)
 	$0 stop
 	$0 start
+	exit $?
 	;;
   *)
-        msg_usage "$0 {start|stop|status|restart}"
-        exit 1
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
