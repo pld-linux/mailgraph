@@ -9,30 +9,22 @@
 # Source function library.
 . /etc/rc.d/init.d/functions
 
+# Get service config
+[ -f /etc/sysconfig/mailgraph ] && . /etc/sysconfig/mailgraph
+
 # See how we were called.
 case "$1" in
-  start)
+ start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/mailgraph ]; then
-		msg_starting "mailgraph"
-		busy
-		/usr/bin/mailgraph.pl >/dev/null 2>&1 &
-		sleep 1
-		ps -C mailgraph >/dev/null 2>&1
-		RETVAL=$?
-		CPID=$!
-		if [ $RETVAL -eq 0 ]; then
-			touch /var/lock/subsys/mailgraph
-			echo $CPID >/var/run/mailgraph.pid
-			deltext; ok;
-		else
-			deltext; fail;
-		fi
+		msg_starting mailgraph
+		daemon /usr/bin/mailgraph.pl -d \
+			$([ -n "$MAILLOG_FILE" ] && echo -l $MAILLOG_FILE ) 2>&1
 	else
-		msg_already_running "mailgraph"
+		msg_already_running atd
 		exit 1
-	fi
-
+        fi
+	touch /var/lock/subsys/mailgraph
         ;;
   stop)
         if [ -f /var/lock/subsys/mailgraph ]; then
