@@ -2,7 +2,7 @@
 Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
-Version:	0.17
+Version:	0.19
 Release:	1
 License:	GPL
 Group:		Applications/Networking
