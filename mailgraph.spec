@@ -1,5 +1,6 @@
 #
 # TODO:
+# - IMPORTANT: don't make temporary files in /tmp that are picked by apache
 # - write %post script with display short activatuion instruction
 #   depending on information is httpd cnfig file is vanilla or not,
 #
