@@ -12,6 +12,7 @@
 # Get service config
 [ -f /etc/sysconfig/mailgraph ] && . /etc/sysconfig/mailgraph
 
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
@@ -20,23 +21,19 @@ case "$1" in
 		msg_starting mailgraph
 		daemon /usr/bin/mailgraph.pl -d \
 			$([ -n "$MAILLOG_FILE" ] && echo -l $MAILLOG_FILE ) 2>&1
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/mailgraph
 	else
 		msg_already_running atd
-		exit 1
 	fi
-	touch /var/lock/subsys/mailgraph
 	;;
   stop)
 	if [ -f /var/lock/subsys/mailgraph ]; then
 		msg_stopping "mailgraph"
-		#busy
 		killproc mailgraph
-		#deltext; ok;
-		rm -f /var/lock/subsys/mailgraph >/dev/null 2>&1
-		rm -f /var/run/mailgraph.pid >/dev/null 2>&1
+		rm -f /var/lock/subsys/mailgraph /var/run/mailgraph.pid >/dev/null 2>&1
 	else
 		msg_not_running "mailgraph"
-		exit 1
 	fi
 															
 	;;
@@ -44,13 +41,14 @@ case "$1" in
   	status mailgraph
 	exit $?
 	;;
-  restart|reload)
+  restart|force-reload)
 	$0 stop
 	$0 start
+	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|status}"
-	exit 1
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
