@@ -12,6 +12,7 @@ Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
+# Source0-md5:	dc997c0318113a1ff31866e75998895d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
