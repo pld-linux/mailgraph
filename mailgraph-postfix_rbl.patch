@@ -1,0 +1,12 @@
+--- mailgraph.orig/mailgraph.pl	Wed Jan 28 10:49:33 2004
++++ mailgraph/mailgraph.pl	Wed Jan 28 10:49:22 2004
+@@ -426,6 +426,9 @@
+ 					$client =~ /\[127\.0\.0\.1\]$/;
+ 				event($time, 'received');
+ 			}
++			elsif($text =~ /\bblocked\b/) {
++				event($time, 'spam');
++			}
+ 			elsif($text =~ /^(?:[0-9A-F]+: |NOQUEUE: )?reject: /) {
+ 				event($time, 'rejected');
+ 			}
