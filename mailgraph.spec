@@ -6,8 +6,21 @@ Version:	0.17
 Release:	1
 License:	GPL
 Group:		Applications/Networking
+Group(cs):	Aplikace/SÌªovÈ
+Group(da):	Programmer/NetvÊrks
 Group(de):	Applikationen/Netzwerkwesen
+Group(es):	Aplicaciones/Red
+Group(fr):	Applications/RÈseau
+Group(is):	Forrit/Net
+Group(it):	Applicazioni/Rete
+Group(no):	Applikasjoner/Nettverk
 Group(pl):	Aplikacje/Sieciowe
+Group(pt):	AplicaÁıes/Rede
+Group(pt_BR):	AplicaÁıes/Rede
+Group(ru):	“…Ãœ÷≈Œ…—/Û≈‘ÿ
+Group(sl):	Programi/Omreæni
+Group(sv):	Till‰mpningar/N‰tverk
+Group(uk):	“…ÀÃ¡ƒŒ¶ “œ«“¡Õ…/Ì≈“≈÷¡
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
@@ -46,7 +59,7 @@ install mailgraph.cgi $RPM_BUILD_ROOT/home/httpd/html/mailgraph/mailgraph.cgi
 install mailgraph.pl $RPM_BUILD_ROOT%{_bindir}/mailgraph.pl
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/%{name}.conf
 
 gzip -9nf README CHANGES
 
@@ -87,7 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/mailgraph.pl
 %attr(755,root,root) /home/httpd/html/mailgraph/mailgraph.cgi
 %attr(754,root,root) /etc/rc.d/init.d/mailgraph
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/httpd/mailgraph.conf
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/httpd/mailgraph.conf
 %dir %{_pkglibdir}
 %attr(771,root,http) %dir /home/httpd/html/mailgraph/imgs
 %doc *.gz
