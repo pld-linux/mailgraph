@@ -1,15 +1,14 @@
-diff -urN mailgraph-0.17/mailgraph.cgi mailgraph-0.17.dzikus/mailgraph.cgi
---- mailgraph-0.17/mailgraph.cgi	Wed Nov  7 15:18:12 2001
-+++ mailgraph-0.17.dzikus/mailgraph.cgi	Wed Nov 28 14:58:36 2001
+--- mailgraph-0.19/mailgraph.cgi.orig	Thu Apr  4 09:41:46 2002
++++ mailgraph-0.19/mailgraph.cgi	Thu May  9 08:00:49 2002
 @@ -14,7 +14,7 @@
+ my $xpoints = 540;
+ my $ypoints = 150;
  my $ypoints_err = 80;
- my $imgs_dir = 'imgs'; # where to store the images
- my $imgs_url = 'imgs'; # where to reference the images in HTML (<IMG> tag)
--my $rrd = 'mailgraph.rrd';
-+my $rrd = '/var/lib/mailgraph/mailgraph.rrd';
+-my $rrd = 'mailgraph.rrd'; # path to where the RRD database is
++my $rrd = '/var/lib/mailgraph/mailgraph.rrd'; # path to where the RRD database is
+ my $tmp_dir = '/tmp/mailgraph'; # temporary directory where to store the images
  
- BEGIN {
-     print "Content-Type: text/html\n\n";
+ my @graphs = (
 diff -urN mailgraph-0.17/mailgraph.pl mailgraph-0.17.dzikus/mailgraph.pl
 --- mailgraph-0.17/mailgraph.pl	Wed Nov  7 15:15:45 2001
 +++ mailgraph-0.17.dzikus/mailgraph.pl	Wed Nov 28 14:41:02 2001
