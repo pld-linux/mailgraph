@@ -18,6 +18,7 @@ Source3:	%{name}.conf
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-postfix_rbl.patch
 URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
+BuildRequires:	rpmbuild(macros) >= 1.176
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun):	grep
@@ -76,7 +77,9 @@ fi
 if [ -f /var/lock/subsys/%{name} ]; then
 	/etc/rc.d/init.d/%{name} restart 1>&2
 else
-	echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
+	%banner %{name} -e << EOF
+Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon.
+EOF
 fi
 
 %preun
