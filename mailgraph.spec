@@ -77,7 +77,7 @@ fi
 if [ -f /var/lock/subsys/%{name} ]; then
 	/etc/rc.d/init.d/%{name} restart 1>&2
 else
-	%banner %{name} -e << EOF
+	%banner %{name} -e <<EOF
 Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon.
 EOF
 fi
