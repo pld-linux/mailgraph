@@ -1,14 +1,20 @@
+#
+# TODO:
+# - write %post script with display short activatuion instruction
+#   depending on information is httpd cnfig file is vanilla or not,
+#
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
-Version:	0.22
+Version:	1.2
 Release:	1
-License:	GPL
+License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
-Source2:	%{name}.conf
+Source2:	%{name}.sysconfig
+Source3:	%{name}.conf
 Patch0:		%{name}-paths.patch
 URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
 PreReq:		rc-scripts
@@ -20,6 +26,9 @@ Requires:	apache-mod_expires
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir		/var/lib/%{name}
+%define		_httpappsdir		%{_libdir}/httpd/apps
+
+%define		_appdefaultconfMD5	%(md5sum %{SOURCE3})
 
 %description
 Mailgraph is a very simple mail statistics RRDtool frontend for
@@ -37,15 +46,15 @@ poczty wys³anej/odebranej i odbitej/odrzuconej.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,httpd},%{_bindir}} \
+	$RPM_BUILD_ROOT{%{_httpappsdir}/mailgraph,%{_pkglibdir}}
 
-install -d $RPM_BUILD_ROOT{%{_pkglibdir},/etc/rc.d/init.d,/etc/httpd,\
-	/home/services/httpd/html/mailgraph/imgs,%{_bindir}}
-
-install mailgraph.cgi $RPM_BUILD_ROOT/home/services/httpd/html/mailgraph/mailgraph.cgi
+install mailgraph.cgi $RPM_BUILD_ROOT%{_httpappsdir}/mailgraph/index.cgi
 install mailgraph.pl $RPM_BUILD_ROOT%{_bindir}/mailgraph.pl
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/%{name}.conf
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/mailgraph
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -84,8 +93,9 @@ fi
 %defattr(644,root,root,755)
 %doc README CHANGES
 %attr(755,root,root) %{_bindir}/mailgraph.pl
-%attr(755,root,root) /home/services/httpd/html/mailgraph/mailgraph.cgi
 %attr(754,root,root) /etc/rc.d/init.d/mailgraph
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/httpd/mailgraph.conf
-%dir %{_pkglibdir}
-%attr(771,root,http) %dir /home/services/httpd/html/mailgraph/imgs
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/mailgraph
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/httpd/mailgraph.conf
+%dir %{_httpappsdir}/mailgraph
+%attr(755,root,root) %{_httpappsdir}/mailgraph/index.cgi
+%attr(750,root,http) %dir %{_pkglibdir}
