@@ -1,6 +1,6 @@
 diff -urN mailgraph-0.20/mailgraph.cgi mailgraph-0.20.dzikus/mailgraph.cgi
 --- mailgraph-0.20/mailgraph.cgi	Tue Jul  2 11:14:49 2002
-+++ mailgraph-0.20.dzikus/mailgraph.cgi	Mon Jul 29 12:08:00 2002
++++ mailgraph-0.20.dzikus/mailgraph.cgi	Tue Jul 30 14:12:48 2002
 @@ -14,8 +14,8 @@
  my $xpoints = 540;
  my $ypoints = 150;
@@ -14,7 +14,18 @@ diff -urN mailgraph-0.20/mailgraph.cgi mailgraph-0.20.dzikus/mailgraph.cgi
  my @graphs = (
 diff -urN mailgraph-0.20/mailgraph.pl mailgraph-0.20.dzikus/mailgraph.pl
 --- mailgraph-0.20/mailgraph.pl	Tue Jul  2 09:31:11 2002
-+++ mailgraph-0.20.dzikus/mailgraph.pl	Mon Jul 29 12:07:15 2002
++++ mailgraph-0.20.dzikus/mailgraph.pl	Tue Jul 30 14:12:11 2002
+@@ -195,8 +195,8 @@
+ 
+ # global variables
+ my $logfile;
+-my $rrd = "mailgraph.rrd";
+-my $rrd_virus = "mailgraph_virus.rrd";
++my $rrd = "/var/lib/mailgraph/mailgraph.rrd";
++my $rrd_virus = "/var/lib/mailgraph/mailgraph_virus.rrd";
+ my $year;
+ my $this_minute;
+ my %sum = ( sent => 0, received => 0, bounced => 0, rejected => 0, virus => 0, spam => 0 );
 @@ -217,7 +217,7 @@
  {
  	print "usage: mailgraph [*options*]\n\n";
