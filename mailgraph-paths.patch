@@ -1,27 +1,21 @@
---- mailgraph-0.19/mailgraph.cgi.orig	Thu Apr  4 09:41:46 2002
-+++ mailgraph-0.19/mailgraph.cgi	Thu May  9 08:00:49 2002
-@@ -14,7 +14,7 @@
+diff -urN mailgraph-0.20/mailgraph.cgi mailgraph-0.20.dzikus/mailgraph.cgi
+--- mailgraph-0.20/mailgraph.cgi	Tue Jul  2 11:14:49 2002
++++ mailgraph-0.20.dzikus/mailgraph.cgi	Mon Jul 29 12:08:00 2002
+@@ -14,8 +14,8 @@
  my $xpoints = 540;
  my $ypoints = 150;
  my $ypoints_err = 80;
 -my $rrd = 'mailgraph.rrd'; # path to where the RRD database is
+-my $rrd_virus = 'mailgraph_virus.rrd'; # path to where the Virus RRD database is
 +my $rrd = '/var/lib/mailgraph/mailgraph.rrd'; # path to where the RRD database is
++my $rrd_virus = '/var/lib/mailgraph/mailgraph_virus.rrd'; # path to where the Virus RRD database is
  my $tmp_dir = '/tmp/mailgraph'; # temporary directory where to store the images
  
  my @graphs = (
-diff -urN mailgraph-0.17/mailgraph.pl mailgraph-0.17.dzikus/mailgraph.pl
---- mailgraph-0.17/mailgraph.pl	Wed Nov  7 15:15:45 2001
-+++ mailgraph-0.17.dzikus/mailgraph.pl	Wed Nov 28 14:41:02 2001
-@@ -189,7 +189,7 @@
- 
- # global variables
- my $logfile;
--my $rrd = "mailgraph.rrd";
-+my $rrd = "/var/lib/mailgraph/mailgraph.rrd";
- my $year;
- my $this_minute;
- my %sum = ( sent => 0, received => 0, bounced => 0, rejected => 0 );
-@@ -208,7 +208,7 @@
+diff -urN mailgraph-0.20/mailgraph.pl mailgraph-0.20.dzikus/mailgraph.pl
+--- mailgraph-0.20/mailgraph.pl	Tue Jul  2 09:31:11 2002
++++ mailgraph-0.20.dzikus/mailgraph.pl	Mon Jul 29 12:07:15 2002
+@@ -217,7 +217,7 @@
  {
  	print "usage: mailgraph [*options*]\n\n";
  	print "  -c, --cat          causes the logfile to be only read and not monitored\n";
@@ -29,8 +23,8 @@ diff -urN mailgraph-0.17/mailgraph.pl mailgraph-0.17.dzikus/mailgraph.pl
 +	print "  -l, --logfile f    monitor logfile f instead of /var/log/maillog\n";
  	print "  -h, --help         display this help and exit\n";
  	print "  -v, --version      output version information and exit\n";
- 
-@@ -226,7 +226,7 @@
+ 	print "  -y, --year         starting year of the log file (default: current year)\n";
+@@ -237,7 +237,7 @@
  		exit;
  	}
  
