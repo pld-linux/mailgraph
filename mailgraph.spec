@@ -1,15 +1,13 @@
 #
 # TODO:
 # - IMPORTANT: don't make temporary files in /tmp that are picked by apache
-# - write %post script with display short activatuion instruction
-#   depending on information is httpd cnfig file is vanilla or not,
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.8
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
@@ -64,9 +62,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-if [ -f /etc/httpd/httpd.conf ] && \
-     ! grep -q "^Include.*/%{name}.conf" /etc/httpd/httpd.conf; then
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*/%{name}.conf" /etc/httpd/httpd.conf; then
 	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/etc/rc.d/init.d/httpd restart 1>&2
+	fi
+elif [ -d /etc/httpd/httpd.conf ]; then
+	ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
 	if [ -f /var/lock/subsys/httpd ]; then
 		/etc/rc.d/init.d/httpd restart 1>&2
 	fi
@@ -80,9 +82,13 @@ fi
 %preun
 if [ "$1" = "0" ]; then
 	umask 027
-	grep -E -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
-		/etc/httpd/httpd.conf.tmp
-	mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+	if [ -d /etc/httpd/httpd.conf ]; then
+		rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+	else
+		grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
+			/etc/httpd/httpd.conf.tmp
+		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+	fi
 	if [ -f /var/lock/subsys/httpd ]; then
 		/etc/rc.d/init.d/httpd restart 1>&2
 	fi
