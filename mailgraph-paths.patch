@@ -1,15 +1,15 @@
 --- mailgraph-0.20/mailgraph.cgi	Tue Jul  2 11:14:49 2002
 +++ mailgraph-0.20.dzikus/mailgraph.cgi	Tue Jul 30 14:12:48 2002
 @@ -10,13 +10,13 @@
- my $VERSION = "1.6";
+ my $VERSION = "1.10";
  
  my $host = (POSIX::uname())[1];
 -my $scriptname = 'mailgraph.cgi';
 +my $scriptname = 'index.cgi';
  my $xpoints = 540;
  my $points_per_sample = 3;
- my $ypoints = 150;
- my $ypoints_err = 80;
+ my $ypoints = 160;
+ my $ypoints_err = 96;
 -my $rrd = 'mailgraph.rrd'; # path to where the RRD database is
 -my $rrd_virus = 'mailgraph_virus.rrd'; # path to where the Virus RRD database is
 +my $rrd = '/var/lib/mailgraph/mailgraph.rrd'; # path to where the RRD database is
@@ -35,7 +35,7 @@
  	print "  -V, --version      output version information and exit\n";
  	print "  -c, --cat          causes the logfile to be only read and not monitored\n";
 -	print "  -l, --logfile f    monitor logfile f instead of /var/log/syslog\n";
-+	print "  -l, --logfile f    monitor logfile f instead of /var/log/maillog\n";
++	print "  -l, --logfile f    monitor logfile f instead of /var/log/mail.log\n";
  	print "  -y, --year         starting year of the log file (default: current year)\n";
  	print "      --host=HOST    use only entries for HOST (regexp) in syslog\n";
  	print "  -d, --daemon       start in the background\n";
@@ -44,7 +44,7 @@
  	daemonize if $opt{daemon};
  
 -	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/syslog';
-+	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/maillog';
++	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/mail.log';
  	my $file;
  	if($opt{cat}) {
  		$file = $logfile;
