@@ -2,7 +2,7 @@
 Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
-Version:	0.19
+Version:	0.20
 Release:	1
 License:	GPL
 Group:		Applications/Networking
@@ -46,8 +46,6 @@ install mailgraph.pl $RPM_BUILD_ROOT%{_bindir}/mailgraph.pl
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/%{name}.conf
 
-gzip -9nf README CHANGES
-
 %post
 /sbin/chkconfig --add %{name}
 if [ -f %{_sysconfdir}/httpd/httpd.conf ] && \
@@ -88,4 +86,4 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/httpd/mailgraph.conf
 %dir %{_pkglibdir}
 %attr(771,root,http) %dir /home/httpd/html/mailgraph/imgs
-%doc *.gz
+%doc README CHANGES
