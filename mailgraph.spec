@@ -6,12 +6,12 @@
 Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
-Version:	1.8
-Release:	4
+Version:	1.10
+Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
-# Source0-md5:	f06cf84a49479529e9d280e78b7b34a9
+# Source0-md5:	0e9c6a1066a38a795c0dab05629ad5f8
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
