@@ -38,9 +38,10 @@ poczty wys³anej/odebranej i odbitej/odrzuconej.
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{%{_pkglibdir},/etc/rc.d/init.d,/etc/httpd,/home/httpd/html/mailgraph,/home/httpd/html/mailgraph/imgs,%{_bindir}}
+install -d $RPM_BUILD_ROOT{%{_pkglibdir},/etc/rc.d/init.d,/etc/httpd,\
+	/home/services/httpd/html/mailgraph/imgs,%{_bindir}}
 
-install mailgraph.cgi $RPM_BUILD_ROOT/home/httpd/html/mailgraph/mailgraph.cgi
+install mailgraph.cgi $RPM_BUILD_ROOT/home/services/httpd/html/mailgraph/mailgraph.cgi
 install mailgraph.pl $RPM_BUILD_ROOT%{_bindir}/mailgraph.pl
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
@@ -81,9 +82,9 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mailgraph.pl
-%attr(755,root,root) /home/httpd/html/mailgraph/mailgraph.cgi
+%attr(755,root,root) /home/services/httpd/html/mailgraph/mailgraph.cgi
 %attr(754,root,root) /etc/rc.d/init.d/mailgraph
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/httpd/mailgraph.conf
 %dir %{_pkglibdir}
-%attr(771,root,http) %dir /home/httpd/html/mailgraph/imgs
+%attr(771,root,http) %dir /home/services/httpd/html/mailgraph/imgs
 %doc README CHANGES
