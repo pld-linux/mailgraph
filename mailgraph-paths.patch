@@ -35,7 +35,7 @@
  	print "  -V, --version      output version information and exit\n";
  	print "  -c, --cat          causes the logfile to be only read and not monitored\n";
 -	print "  -l, --logfile f    monitor logfile f instead of /var/log/syslog\n";
-+	print "  -l, --logfile f    monitor logfile f instead of /var/log/mail.log\n";
++	print "  -l, --logfile f    monitor logfile f instead of /var/log/maillog\n";
  	print "  -t, --logtype t    set logfile's type (default: syslog)\n";
  	print "  -y, --year         starting year of the log file (default: current year)\n";
  	print "      --host=HOST    use only entries for HOST (regexp) in syslog\n";
@@ -44,7 +44,7 @@
  	daemonize if $opt{daemon};
  
 -	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/syslog';
-+	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/mail.log';
++	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/maillog';
  	my $file;
  	if($opt{cat}) {
  		$file = $logfile;

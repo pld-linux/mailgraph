@@ -4,7 +4,7 @@
 SERVICE_RUN_NICE_LEVEL="+0"
 
 # Specify mail logfile for monitor by mailgraph 
-# instead default /var/log/mail.log
+# instead default /var/log/maillog
 # for example: /var/log/mail/info
 
 #MAILLOG_FILE=/var/log/mail/info
