@@ -1,6 +1,6 @@
-# Customized setings for cron
+# Customized setings for mailgraph
 
-# Define nice level for cron
+# Define nice level for mailgraph
 SERVICE_RUN_NICE_LEVEL="+0"
 
 # Specify mail logfile for monitor by mailgraph 
