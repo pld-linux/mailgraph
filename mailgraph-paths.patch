@@ -1,4 +1,3 @@
-diff -urN mailgraph-0.20/mailgraph.cgi mailgraph-0.20.dzikus/mailgraph.cgi
 --- mailgraph-0.20/mailgraph.cgi	Tue Jul  2 11:14:49 2002
 +++ mailgraph-0.20.dzikus/mailgraph.cgi	Tue Jul 30 14:12:48 2002
 @@ -14,8 +14,8 @@
@@ -12,10 +11,9 @@ diff -urN mailgraph-0.20/mailgraph.cgi mailgraph-0.20.dzikus/mailgraph.cgi
  my $tmp_dir = '/tmp/mailgraph'; # temporary directory where to store the images
  
  my @graphs = (
-diff -urN mailgraph-0.20/mailgraph.pl mailgraph-0.20.dzikus/mailgraph.pl
---- mailgraph-0.20/mailgraph.pl	Tue Jul  2 09:31:11 2002
-+++ mailgraph-0.20.dzikus/mailgraph.pl	Tue Jul 30 14:12:11 2002
-@@ -195,8 +195,8 @@
+--- mailgraph-1.2/mailgraph.pl.orig	Sun Jan  5 23:32:04 2003
++++ mailgraph-1.2/mailgraph.pl	Tue Jan 28 12:21:21 2003
+@@ -226,8 +226,8 @@
  
  # global variables
  my $logfile;
@@ -26,18 +24,18 @@ diff -urN mailgraph-0.20/mailgraph.pl mailgraph-0.20.dzikus/mailgraph.pl
  my $year;
  my $this_minute;
  my %sum = ( sent => 0, received => 0, bounced => 0, rejected => 0, virus => 0, spam => 0 );
-@@ -217,7 +217,7 @@
- {
- 	print "usage: mailgraph [*options*]\n\n";
+@@ -253,7 +253,7 @@
+ 	print "  -v, --verbose      be verbose about what you do\n";
+ 	print "  -V, --version      output version information and exit\n";
  	print "  -c, --cat          causes the logfile to be only read and not monitored\n";
 -	print "  -l, --logfile f    monitor logfile f instead of /var/log/syslog\n";
 +	print "  -l, --logfile f    monitor logfile f instead of /var/log/maillog\n";
- 	print "  -h, --help         display this help and exit\n";
- 	print "  -v, --version      output version information and exit\n";
  	print "  -y, --year         starting year of the log file (default: current year)\n";
-@@ -237,7 +237,7 @@
- 		exit;
- 	}
+ 	print "      --host=HOST    use only entries for HOST (regexp) in syslog\n";
+ 	print "  -d, --daemon       start in the background\n";
+@@ -286,7 +286,7 @@
+ 	$daemon_rrd_dir = $opt{daemon_rrd} if defined $opt{daemon_rrd};
+ 	daemonize if $opt{daemon};
  
 -	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/syslog';
 +	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/maillog';
