@@ -6,21 +6,6 @@ Version:	0.17
 Release:	1
 License:	GPL
 Group:		Applications/Networking
-Group(cs):	Aplikace/Sí»ové
-Group(da):	Programmer/Netværks
-Group(de):	Applikationen/Netzwerkwesen
-Group(es):	Aplicaciones/Red
-Group(fr):	Applications/Réseau
-Group(is):	Forrit/Net
-Group(it):	Applicazioni/Rete
-Group(no):	Applikasjoner/Nettverk
-Group(pl):	Aplikacje/Sieciowe
-Group(pt):	Aplicações/Rede
-Group(pt_BR):	Aplicações/Rede
-Group(ru):	ğÒÉÌÏÖÅÎÉÑ/óÅÔØ
-Group(sl):	Programi/Omre¾ni
-Group(sv):	Tillämpningar/Nätverk
-Group(uk):	ğÒÉËÌÁÄÎ¦ ğÒÏÇÒÁÍÉ/íÅÒÅÖÁ
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
