@@ -24,14 +24,11 @@ Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun):	grep
 Requires(preun):	fileutils
 Requires:	postfix
-Requires:	apache-mod_expires
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir		/var/lib/%{name}
 %define		_httpappsdir		%{_datadir}/%{name}
-
-%define		_appdefaultconfMD5	%(md5sum %{SOURCE3})
 
 %description
 Mailgraph is a very simple mail statistics RRDtool frontend for
@@ -65,9 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-if [ -f %{_sysconfdir}/httpd/httpd.conf ] && \
-     ! grep -q "^Include.*/%{name}.conf" %{_sysconfdir}/httpd/httpd.conf; then
-	echo "Include %{_sysconfdir}/httpd/%{name}.conf" >> %{_sysconfdir}/httpd/httpd.conf
+if [ -f /etc/httpd/httpd.conf ] && \
+     ! grep -q "^Include.*/%{name}.conf" /etc/httpd/httpd.conf; then
+	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
 	if [ -f /var/lock/subsys/httpd ]; then
 		/etc/rc.d/init.d/httpd restart 1>&2
 	fi
@@ -81,9 +78,9 @@ fi
 %preun
 if [ "$1" = "0" ]; then
 	umask 027
-	grep -E -v "^Include.*%{name}.conf" %{_sysconfdir}/httpd/httpd.conf > \
-		%{_sysconfdir}/httpd/httpd.conf.tmp
-	mv -f %{_sysconfdir}/httpd/httpd.conf.tmp %{_sysconfdir}/httpd/httpd.conf
+	grep -E -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
+		/etc/httpd/httpd.conf.tmp
+	mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
 	if [ -f /var/lock/subsys/httpd ]; then
 		/etc/rc.d/init.d/httpd restart 1>&2
 	fi
