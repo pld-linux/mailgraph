@@ -1,7 +1,13 @@
 --- mailgraph-0.20/mailgraph.cgi	Tue Jul  2 11:14:49 2002
 +++ mailgraph-0.20.dzikus/mailgraph.cgi	Tue Jul 30 14:12:48 2002
-@@ -14,8 +14,8 @@
+@@ -10,13 +10,13 @@
+ my $VERSION = "1.6";
+ 
+ my $host = (POSIX::uname())[1];
+-my $scriptname = 'mailgraph.cgi';
++my $scriptname = 'index.cgi';
  my $xpoints = 540;
+ my $points_per_sample = 3;
  my $ypoints = 150;
  my $ypoints_err = 80;
 -my $rrd = 'mailgraph.rrd'; # path to where the RRD database is
