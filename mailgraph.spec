@@ -11,12 +11,12 @@ Source1:	%{name}.init
 Source2:	%{name}.conf
 Patch0:		%{name}-paths.patch
 URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
-Prereq:		/sbin/chkconfig
-Prereq:		rc-scripts
-Prereq:		grep
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
+Requires(post,preun):	grep
+Requires(preun):	fileutils
 Requires:	postfix
 Requires:	apache-mod_expires
-Provides:	%{name}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pkglibdir		/var/lib/%{name}
@@ -47,6 +47,9 @@ install mailgraph.pl $RPM_BUILD_ROOT%{_bindir}/mailgraph.pl
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/%{name}.conf
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %post
 /sbin/chkconfig --add %{name}
 if [ -f %{_sysconfdir}/httpd/httpd.conf ] && \
@@ -64,6 +67,7 @@ fi
 
 %preun
 if [ "$1" = "0" ]; then
+	umask 027
 	grep -E -v "^Include.*%{name}.conf" %{_sysconfdir}/httpd/httpd.conf > \
 		%{_sysconfdir}/httpd/httpd.conf.tmp
 	mv -f %{_sysconfdir}/httpd/httpd.conf.tmp %{_sysconfdir}/httpd/httpd.conf
@@ -76,15 +80,12 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del %{name}
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %defattr(644,root,root,755)
+%doc README CHANGES
 %attr(755,root,root) %{_bindir}/mailgraph.pl
 %attr(755,root,root) /home/services/httpd/html/mailgraph/mailgraph.cgi
 %attr(754,root,root) /etc/rc.d/init.d/mailgraph
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/httpd/mailgraph.conf
 %dir %{_pkglibdir}
 %attr(771,root,http) %dir /home/services/httpd/html/mailgraph/imgs
-%doc README CHANGES
