@@ -1,6 +1,6 @@
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple mail statistics for Postfix
-Summary(pl):	Proste statystyki dla Postfix'a
+Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	0.17
 Release:	1
@@ -13,7 +13,8 @@ Source1:	%{name}.init
 Source2:	%{name}.conf
 Patch0:		%{name}-paths.patch
 URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
-Prereq:		chkconfig
+Prereq:		/sbin/chkconfig
+Prereq:		rc-scripts
 Prereq:		grep
 Requires:	postfix
 Requires:	apache-mod_expires
@@ -26,6 +27,11 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Mailgraph is a very simple mail statistics RRDtool frontend for
 Postfix that produces daily, weekly, monthly and yearly graphs of
 received/sent and bounced/rejected mail.
+
+%description -l pl
+Mailgraph to prosty frontend na RRDtool do statystyk pocztowych dla
+Postfiksa. Produkuje wykresy dzienne, tygodniowe, miesiêczne i roczne
+poczty wys³anej/odebranej i odbitej/odrzuconej.
 
 %prep
 %setup	-q
