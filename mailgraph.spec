@@ -1,0 +1,87 @@
+%include	/usr/lib/rpm/macros.perl
+Summary:	Simple mail statistics for Postfix
+Summary(pl):	Proste statystyki dla Postfix'a
+Name:		mailgraph
+Version:	0.17
+Release:	1
+License:	GPL
+Group:		Applications/Networking
+Group(de):	Applikationen/Netzwerkwesen
+Group(pl):	Aplikacje/Sieciowe
+Source0:	%{name}-%{version}.tar.gz
+Source1:	%{name}.init
+Source2:	%{name}.conf
+Patch0:		%{name}-paths.patch
+URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
+Prereq:		chkconfig
+Prereq:		grep
+Requires:	postfix
+Requires:	apache-mod_expires
+Provides:	%{name}
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_pkglibdir		/var/lib/%{name}
+
+%description
+Mailgraph is a very simple mail statistics RRDtool frontend for
+Postfix that produces daily, weekly, monthly and yearly graphs of
+received/sent and bounced/rejected mail.
+
+%prep
+%setup	-q
+%patch0 -p1
+
+%install
+rm -rf $RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT{%{_pkglibdir},/etc/rc.d/init.d,/etc/httpd,/home/httpd/html/mailgraph,/home/httpd/html/mailgraph/imgs,%{_bindir}}
+
+install mailgraph.cgi $RPM_BUILD_ROOT/home/httpd/html/mailgraph/mailgraph.cgi
+install mailgraph.pl $RPM_BUILD_ROOT%{_bindir}/mailgraph.pl
+
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+
+gzip -9nf README CHANGES
+
+%post
+/sbin/chkconfig --add %{name}
+if [ -f %{_sysconfdir}/httpd/httpd.conf ] && \
+        ! grep -q "^Include.*/%{name}.conf" %{_sysconfdir}/httpd/httpd.conf; then
+                echo "Include %{_sysconfdir}/httpd/%{name}.conf" >> %{_sysconfdir}/httpd/httpd.conf
+        if [ -f /var/lock/subsys/httpd ]; then
+                /etc/rc.d/init.d/httpd restart 1>&2
+        fi
+fi
+if [ -f /var/lock/subsys/%{name} ]; then
+        /etc/rc.d/init.d/%{name} restart 1>&2
+else
+        echo "Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon."
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	grep -E -v "^Include.*%{name}.conf" %{_sysconfdir}/httpd/httpd.conf > \
+		%{_sysconfdir}/httpd/httpd.conf.tmp
+	mv -f %{_sysconfdir}/httpd/httpd.conf.tmp %{_sysconfdir}/httpd/httpd.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/etc/rc.d/init.d/httpd restart 1>&2
+	fi
+	if [ -f /var/lock/subsys/%{name} ]; then
+        	/etc/rc.d/init.d/%{name} stop 1>&2
+    	fi
+	/sbin/chkconfig --del %{name}
+fi
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/mailgraph.pl
+%attr(755,root,root) /home/httpd/html/mailgraph/mailgraph.cgi
+%attr(754,root,root) /etc/rc.d/init.d/mailgraph
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/httpd/mailgraph.conf
+%dir %{_pkglibdir}
+%attr(771,root,http) %dir /home/httpd/html/mailgraph/imgs
+%doc *.gz
