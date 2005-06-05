@@ -18,6 +18,7 @@ Source3:	%{name}.conf
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-postfix_rbl.patch
 URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
+BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.176
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
