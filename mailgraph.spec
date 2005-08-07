@@ -111,4 +111,4 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/httpd/mailgraph.conf
 %dir %{_httpappsdir}
 %attr(755,root,root) %{_httpappsdir}/index.cgi
-%attr(750,root,http) %dir %{_pkglibdir}
+%attr(771,root,stats) %dir %{_pkglibdir}
