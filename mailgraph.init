@@ -40,10 +40,9 @@ case "$1" in
 	else
 		msg_not_running "mailgraph"
 	fi
-															
 	;;
   status)
-  	status mailgraph
+	status mailgraph.pl
 	exit $?
 	;;
   restart|force-reload)
