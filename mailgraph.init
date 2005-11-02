@@ -29,16 +29,16 @@ case "$1" in
 			ln -sf /var/lib/mailgraph/mailgraph.pid /var/run/mailgraph.pid
 		fi
 	else
-		msg_already_running atd
+		msg_already_running mailgraph
 	fi
 	;;
   stop)
 	if [ -f /var/lock/subsys/mailgraph ]; then
-		msg_stopping "mailgraph"
+		msg_stopping mailgraph
 		killproc mailgraph
 		rm -f /var/lock/subsys/mailgraph /var/run/mailgraph.pid /var/lib/mailgraph >/dev/null 2>&1
 	else
-		msg_not_running "mailgraph"
+		msg_not_running mailgraph
 	fi
 	;;
   status)
