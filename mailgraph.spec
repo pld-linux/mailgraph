@@ -1,13 +1,10 @@
 #
-# TODO:
-# - IMPORTANT: don't make temporary files in /tmp that are picked by apache
-#
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.12
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
@@ -50,7 +47,7 @@ poczty wys³anej/odebranej i odbitej/odrzuconej.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,httpd},%{_bindir}} \
-	$RPM_BUILD_ROOT{%{_httpappsdir},%{_pkglibdir}}
+	$RPM_BUILD_ROOT{%{_httpappsdir},%{_pkglibdir}/img}
 
 install mailgraph.cgi $RPM_BUILD_ROOT%{_httpappsdir}/index.cgi
 install mailgraph.pl $RPM_BUILD_ROOT%{_bindir}/mailgraph.pl
@@ -112,3 +109,4 @@ fi
 %dir %{_httpappsdir}
 %attr(755,root,root) %{_httpappsdir}/index.cgi
 %attr(771,root,stats) %dir %{_pkglibdir}
+%attr(775,root,http) %dir %{_pkglibdir}/img
