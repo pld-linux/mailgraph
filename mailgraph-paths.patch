@@ -1,7 +1,7 @@
 --- mailgraph-0.20/mailgraph.cgi	Tue Jul  2 11:14:49 2002
 +++ mailgraph-0.20.dzikus/mailgraph.cgi	Tue Jul 30 14:12:48 2002
-@@ -10,13 +10,13 @@
- my $VERSION = "1.10";
+@@ -10,14 +10,14 @@
+ my $VERSION = "1.12";
  
  my $host = (POSIX::uname())[1];
 -my $scriptname = 'mailgraph.cgi';
@@ -12,11 +12,13 @@
  my $ypoints_err = 96;
 -my $rrd = 'mailgraph.rrd'; # path to where the RRD database is
 -my $rrd_virus = 'mailgraph_virus.rrd'; # path to where the Virus RRD database is
+-my $tmp_dir = '/tmp/mailgraph'; # temporary directory where to store the images
 +my $rrd = '/var/lib/mailgraph/mailgraph.rrd'; # path to where the RRD database is
 +my $rrd_virus = '/var/lib/mailgraph/mailgraph_virus.rrd'; # path to where the Virus RRD database is
- my $tmp_dir = '/tmp/mailgraph'; # temporary directory where to store the images
++my $tmp_dir = '/var/lib/mailgraph/img'; # temporary directory where to store the images
  
  my @graphs = (
+ 	{ title => 'Day Graphs',   seconds => 3600*24,        },
 --- mailgraph-1.2/mailgraph.pl.orig	Sun Jan  5 23:32:04 2003
 +++ mailgraph-1.2/mailgraph.pl	Tue Jan 28 12:21:21 2003
 @@ -304,8 +304,8 @@
