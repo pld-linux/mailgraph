@@ -21,6 +21,7 @@ PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun):	grep
 Requires(preun):	fileutils
+Requires:	apache >= 2.0
 Requires:	apache-mod_expires
 Requires:	postfix
 BuildArch:	noarch
@@ -76,7 +77,7 @@ if [ -f /var/lock/subsys/%{name} ]; then
 	/etc/rc.d/init.d/%{name} restart 1>&2
 else
 	%banner %{name} -e <<EOF
-Run \"/etc/rc.d/init.d/%{name} start\" to start %{name} daemon.
+Run "/etc/rc.d/init.d/%{name} start" to start %{name} daemon.
 EOF
 fi
 
