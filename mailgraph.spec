@@ -17,13 +17,13 @@ Patch1:		%{name}-postfix_rbl.patch
 URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.176
-PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun):	grep
 Requires(preun):	fileutils
 Requires:	apache >= 2.0
 Requires:	apache-mod_expires
 Requires:	postfix
+Requires:	rc-scripts
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -105,8 +105,8 @@ fi
 %doc README CHANGES
 %attr(755,root,root) %{_bindir}/mailgraph.pl
 %attr(754,root,root) /etc/rc.d/init.d/mailgraph
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/mailgraph
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/httpd/mailgraph.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/mailgraph
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/httpd/mailgraph.conf
 %dir %{_httpappsdir}
 %attr(755,root,root) %{_httpappsdir}/index.cgi
 %attr(771,root,stats) %dir %{_pkglibdir}
