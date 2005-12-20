@@ -36,7 +36,7 @@ case "$1" in
 	if [ -f /var/lock/subsys/mailgraph ]; then
 		msg_stopping mailgraph
 		killproc mailgraph
-		rm -f /var/lock/subsys/mailgraph /var/run/mailgraph.pid /var/lib/mailgraph >/dev/null 2>&1
+		rm -f /var/lock/subsys/mailgraph /var/run/mailgraph.pid /var/lib/mailgraph/mailgraph.pid >/dev/null 2>&1
 	else
 		msg_not_running mailgraph
 	fi
