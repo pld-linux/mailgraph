@@ -1,4 +1,4 @@
-# Customized setings for mailgraph
+# Customized settings for mailgraph
 
 # Define nice level for mailgraph
 SERVICE_RUN_NICE_LEVEL="+0"
