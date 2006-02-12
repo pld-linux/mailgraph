@@ -8,3 +8,9 @@ SERVICE_RUN_NICE_LEVEL="+0"
 # for example: /var/log/mail/info
 
 #MAILLOG_FILE=/var/log/mail/info
+
+# Count RBL rejects as SPAM (default: no)
+#RBL_IS_SPAM="yes"
+
+# Count blocked viruses rejects as viruses (default: no)
+#VIRBL_IS_VIRUS="yes"
