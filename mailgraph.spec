@@ -1,3 +1,6 @@
+# 
+# TODO:
+# - switch to webapps framework...
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple mail statistics for Postfix
