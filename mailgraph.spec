@@ -3,7 +3,7 @@ Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.12
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
@@ -86,14 +86,22 @@ if [ "$1" = "0" ]; then
 fi
 
 %triggerin -- apache1
-%addusertogroup http stats
+m=$(%addusertogroup http stats)
+if [ -n "$m" ]; then
+	echo >&2 "$m"
+	%service apache restart
+fi
 %webapp_register apache %{_webapp}
 
 %triggerun -- apache1
 %webapp_unregister apache %{_webapp}
 
 %triggerin -- apache < 2.2.0, apache-base
-%addusertogroup http stats
+m=$(%addusertogroup http stats)
+if [ -n "$m" ]; then
+	echo >&2 "$m"
+	%service httpd restart
+fi
 %webapp_register httpd %{_webapp}
 
 %triggerun -- apache < 2.2.0, apache-base
