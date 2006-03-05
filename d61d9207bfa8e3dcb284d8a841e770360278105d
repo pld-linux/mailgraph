@@ -1,0 +1,2 @@
+- BR: rpmbuild(macros) >= 1.176 due to:
+- %banner support
