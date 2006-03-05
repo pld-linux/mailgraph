@@ -29,7 +29,7 @@ case "$1" in
 		fi
 		
 		msg_starting mailgraph
-		daemon --user stats /usr/bin/mailgraph.pl -d \
+		daemon --user stats /usr/sbin/mailgraph.pl -d \
 			${STARTUP_OPTIONS} \
 			--daemon-rrd=/var/lib/mailgraph \
 			--daemon-pid=/var/lib/mailgraph/mailgraph.pid \
