@@ -1,0 +1,6 @@
+- migrate to webapps framework
+- add stats user to syslog group if sysklogd is used
+- package /var/log/mailgraph.log ghost which stats user attempts to log into
+- use %service
+- cgi program moved to /usr/lib/cgi-bin/mailgraph
+- rel 3
