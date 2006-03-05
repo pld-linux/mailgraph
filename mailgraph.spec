@@ -3,7 +3,7 @@ Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.12
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
@@ -22,6 +22,7 @@ Requires:	apache(mod_cgi)
 Requires:	apache(mod_expires)
 Requires:	postfix
 Requires:	rc-scripts
+Requires:	webapps
 Requires:	webserver = apache
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -85,12 +86,14 @@ if [ "$1" = "0" ]; then
 fi
 
 %triggerin -- apache1
+%addusertogroup http stats
 %webapp_register apache %{_webapp}
 
 %triggerun -- apache1
 %webapp_unregister apache %{_webapp}
 
 %triggerin -- apache < 2.2.0, apache-base
+%addusertogroup http stats
 %webapp_register httpd %{_webapp}
 
 %triggerun -- apache < 2.2.0, apache-base
@@ -124,6 +127,6 @@ rm -f /etc/httpd/conf.d/99_mailgraph.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/mailgraph
 %dir %{_appdir}
 %attr(755,root,root) %{_appdir}/index.cgi
-%attr(771,root,stats) %dir %{_pkglibdir}
+%attr(770,root,stats) %dir %{_pkglibdir}
 %attr(775,root,http) %dir %{_pkglibdir}/img
 %ghost /var/log/mailgraph.log
