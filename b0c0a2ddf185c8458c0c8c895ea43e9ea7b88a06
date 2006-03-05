@@ -1,0 +1,6 @@
+- upgrade to 1.2,
+- start prepare new httpd apps scheme,
+  TODO:
+  - write %post script with display short activatuion instruction
+   depending on information is httpd cnfig file is vanilla or not
+  Note: NFY
