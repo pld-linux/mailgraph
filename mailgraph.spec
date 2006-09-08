@@ -3,7 +3,7 @@ Summary:	Simple mail statistics for Postfix
 Summary(pl):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.12
-Release:	5
+Release:	6
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
@@ -123,6 +123,9 @@ fi
 rm -f /etc/httpd/conf.d/99_mailgraph.conf
 /usr/sbin/webapp register httpd %{_webapp}
 %service -q httpd reload
+
+%triggerpostun -- %{name} < 1.12-6
+chown stats:stats %{_pkglibdir}/*.rrd
 
 %files
 %defattr(644,root,root,755)
