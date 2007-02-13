@@ -1,6 +1,6 @@
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple mail statistics for Postfix
-Summary(pl.UTF-8):   Proste statystyki dla Postfiksa
+Summary(pl.UTF-8):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.12
 Release:	7
