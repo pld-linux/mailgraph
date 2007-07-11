@@ -1,19 +1,21 @@
+# TODO:
+# - make separate 2 packages: daemon and web-frontend
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple mail statistics for Postfix
 Summary(pl.UTF-8):	Proste statystyki dla Postfiksa
 Name:		mailgraph
-Version:	1.12
-Release:	7
+Version:	1.13
+Release:	0.1
 License:	GPL v2
 Group:		Applications/Networking
-Source0:	http://people.ee.ethz.ch/~dws/software/mailgraph/pub/%{name}-%{version}.tar.gz
-# Source0-md5:	e3c88ee9ff6e423942ff8ce7038449c4
+Source0:	http://mailgraph.schweikert.ch/pub/%{name}-%{version}.tar.gz
+# Source0-md5:	b59cc2375662f6c113c6be2ab5bfa179
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-postfix_rbl.patch
-URL:		http://people.ee.ethz.ch/~dws/software/mailgraph/
+URL:		http://mailgraph.schweikert.ch/
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
@@ -46,7 +48,7 @@ poczty wysłanej/odebranej i odbitej/odrzuconej.
 %prep
 %setup	-q
 %patch0 -p1
-%patch1 -p1
+#%patch1 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
