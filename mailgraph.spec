@@ -5,7 +5,7 @@ Summary:	Simple mail statistics for Postfix
 Summary(pl.UTF-8):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.13
-Release:	0.1
+Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://mailgraph.schweikert.ch/pub/%{name}-%{version}.tar.gz
@@ -48,7 +48,7 @@ poczty wysłanej/odebranej i odbitej/odrzuconej.
 %prep
 %setup	-q
 %patch0 -p1
-#%patch1 -p1
+%patch1 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
