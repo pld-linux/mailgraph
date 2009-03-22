@@ -5,7 +5,7 @@ Summary:	Simple mail statistics for Postfix
 Summary(pl.UTF-8):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.14
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://mailgraph.schweikert.ch/pub/%{name}-%{version}.tar.gz
@@ -61,7 +61,10 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/mailgraph
 install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+install mailgraph.css $RPM_BUILD_ROOT%{_sysconfdir}/mailgraph.css
 touch $RPM_BUILD_ROOT/var/log/mailgraph.log
+
+ln -sf %{_sysconfdir}/mailgraph.css $RPM_BUILD_ROOT%{_appdir}/mailgraph.css
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -135,11 +138,13 @@ chown stats:stats %{_pkglibdir}/*.rrd
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mailgraph.css
 %attr(755,root,root) %{_sbindir}/mailgraph.pl
 %attr(754,root,root) /etc/rc.d/init.d/mailgraph
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/mailgraph
 %dir %{_appdir}
 %attr(755,root,root) %{_appdir}/index.cgi
+%attr(644,root,root) %{_appdir}/mailgraph.css
 %attr(770,root,stats) %dir %{_pkglibdir}
 %attr(775,root,http) %dir %{_pkglibdir}/img
 %ghost /var/log/mailgraph.log
