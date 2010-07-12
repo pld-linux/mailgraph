@@ -5,6 +5,8 @@
 #
 # chkconfig:	345 55 45
 # description:	mailgraph watch postfix logfiles and generate www statistics
+#
+# $Id$
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -15,54 +17,80 @@ STARTUP_OPTIONS=""
 # Get service config
 [ -f /etc/sysconfig/mailgraph ] && . /etc/sysconfig/mailgraph
 
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/mailgraph ]; then
+		msg_already_running "mailgraph"
+		return
+	fi
+
+	if [ "${RBL_IS_SPAM}" = "yes" ]; then
+		STARTUP_OPTIONS="${STARTUP_OPTIONS} --rbl-is-spam"
+	fi
+	if [ "${VIRBL_IS_VIRUS}" = "yes" ]; then
+		STARTUP_OPTIONS="${STARTUP_OPTIONS} --virbl-is-virus"
+	fi
+
+	msg_starting "mailgraph"
+	daemon --user stats /usr/sbin/mailgraph.pl -d \
+		${STARTUP_OPTIONS} \
+		--daemon-rrd=/var/lib/mailgraph \
+		--daemon-pid=/var/lib/mailgraph/mailgraph.pid \
+		$([ -n "$MAILLOG_FILE" ] && echo -l $MAILLOG_FILE ) 2>&1
+	RETVAL=$?
+	if [ $RETVAL -eq 0 ] ; then
+		touch /var/lock/subsys/mailgraph
+		ln -sf /var/lib/mailgraph/mailgraph.pid /var/run/mailgraph.pid
+	fi
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/mailgraph ]; then
+		msg_not_running "mailgraph"
+		return
+	fi
+
+	msg_stopping "mailgraph"
+	killproc mailgraph
+	rm -f /var/lock/subsys/mailgraph /var/run/mailgraph.pid /var/lib/mailgraph/mailgraph.pid >/dev/null 2>&1
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/mailgraph ]; then
+		msg_not_running "mailgraph"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/mailgraph ]; then
-		if [ "${RBL_IS_SPAM}" = "yes" ]; then
-			STARTUP_OPTIONS="${STARTUP_OPTIONS} --rbl-is-spam"
-		fi
-		if [ "${VIRBL_IS_VIRUS}" = "yes" ]; then
-			STARTUP_OPTIONS="${STARTUP_OPTIONS} --virbl-is-virus"	
-		fi
-		
-		msg_starting mailgraph
-		daemon --user stats /usr/sbin/mailgraph.pl -d \
-			${STARTUP_OPTIONS} \
-			--daemon-rrd=/var/lib/mailgraph \
-			--daemon-pid=/var/lib/mailgraph/mailgraph.pid \
-			$([ -n "$MAILLOG_FILE" ] && echo -l $MAILLOG_FILE ) 2>&1
-		RETVAL=$?
-		if [ $RETVAL -eq 0 ] ; then
-			touch /var/lock/subsys/mailgraph
-			ln -sf /var/lib/mailgraph/mailgraph.pid /var/run/mailgraph.pid
-		fi
-	else
-		msg_already_running mailgraph
-	fi
+	start
 	;;
   stop)
-	if [ -f /var/lock/subsys/mailgraph ]; then
-		msg_stopping mailgraph
-		killproc mailgraph
-		rm -f /var/lock/subsys/mailgraph /var/run/mailgraph.pid /var/lib/mailgraph/mailgraph.pid >/dev/null 2>&1
-	else
-		msg_not_running mailgraph
-	fi
+	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
+	condrestart 7
 	;;
   status)
 	status mailgraph.pl
 	exit $?
 	;;
-  restart|force-reload)
-	$0 stop
-	$0 start
-	exit $?
-	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
 	exit 3
 esac
 
