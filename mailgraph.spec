@@ -16,6 +16,7 @@ Source3:	%{name}.conf
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-postfix_rbl.patch
 URL:		http://mailgraph.schweikert.ch/
+BuildRequires:	perl-tools-pod
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
@@ -50,21 +51,24 @@ poczty wysłanej/odebranej i odbitej/odrzuconej.
 %patch0 -p1
 %patch1 -p1
 
+%build
+pod2man mailgraph.pl > mailgraph.1
+
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_sysconfdir},%{_sbindir}} \
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{_sysconfdir},%{_sbindir},%{_mandir}/man1} \
 	$RPM_BUILD_ROOT{%{_appdir},%{_pkglibdir}/img,/var/log}
 
-install mailgraph.cgi $RPM_BUILD_ROOT%{_appdir}/index.cgi
-install mailgraph.pl $RPM_BUILD_ROOT%{_sbindir}/mailgraph.pl
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/mailgraph
-install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
-install mailgraph.css $RPM_BUILD_ROOT%{_sysconfdir}/mailgraph.css
-touch $RPM_BUILD_ROOT/var/log/mailgraph.log
-
+install -p mailgraph.cgi $RPM_BUILD_ROOT%{_appdir}/index.cgi
+install -p mailgraph.pl $RPM_BUILD_ROOT%{_sbindir}/mailgraph.pl
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+cp -a mailgraph.1 $RPM_BUILD_ROOT%{_mandir}/man1
+cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/mailgraph
+cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a mailgraph.css $RPM_BUILD_ROOT%{_sysconfdir}/mailgraph.css
 ln -sf %{_sysconfdir}/mailgraph.css $RPM_BUILD_ROOT%{_appdir}/mailgraph.css
+touch $RPM_BUILD_ROOT/var/log/mailgraph.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -138,13 +142,14 @@ chown stats:stats %{_pkglibdir}/*.rrd
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mailgraph.css
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mailgraph.css
 %attr(755,root,root) %{_sbindir}/mailgraph.pl
+%{_mandir}/man1/mailgraph.1*
 %attr(754,root,root) /etc/rc.d/init.d/mailgraph
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/mailgraph
 %dir %{_appdir}
 %attr(755,root,root) %{_appdir}/index.cgi
-%attr(644,root,root) %{_appdir}/mailgraph.css
+%{_appdir}/mailgraph.css
 %attr(770,root,stats) %dir %{_pkglibdir}
 %attr(775,root,http) %dir %{_pkglibdir}/img
 %ghost /var/log/mailgraph.log
