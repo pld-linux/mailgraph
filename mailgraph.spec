@@ -1,11 +1,9 @@
-# TODO:
-# - lighttpd support
 %include	/usr/lib/rpm/macros.perl
 Summary:	Simple mail statistics for Postfix
 Summary(pl.UTF-8):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.14
-Release:	2.3
+Release:	2.7
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://mailgraph.schweikert.ch/pub/%{name}-%{version}.tar.gz
@@ -13,6 +11,7 @@ Source0:	http://mailgraph.schweikert.ch/pub/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
+Source4:	lighttpd.conf
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-postfix_rbl.patch
 Patch2:		clamd-enable.patch
@@ -47,10 +46,10 @@ poczty wysłanej/odebranej i odbitej/odrzuconej.
 Summary:	CGI script for displaying mailgraph rrd data
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
-Requires:	apache(mod_cgi)
-Requires:	apache(mod_expires)
 Requires:	webapps
 Requires:	webserver
+Requires:	webserver(cgi)
+Requires:	webserver(expires)
 
 %description cgi
 CGI script for displaying mailgraph rrd data.
@@ -74,11 +73,14 @@ install -p mailgraph.pl $RPM_BUILD_ROOT%{_sbindir}/mailgraph.pl
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -a mailgraph.1 $RPM_BUILD_ROOT%{_mandir}/man1
 cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/mailgraph
+touch $RPM_BUILD_ROOT/var/log/mailgraph.log
+
+# cgi app
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 cp -a mailgraph.css $RPM_BUILD_ROOT%{_sysconfdir}/mailgraph.css
 ln -sf %{_sysconfdir}/mailgraph.css $RPM_BUILD_ROOT%{_appdir}/mailgraph.css
-touch $RPM_BUILD_ROOT/var/log/mailgraph.log
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -109,6 +111,12 @@ fi
 %triggerun cgi -- apache < 2.2.0, apache-base
 %webapp_unregister httpd %{_webapp}
 
+%triggerin cgi -- lighttpd
+%webapp_register lighttpd %{_webapp}
+
+%triggerun cgi -- lighttpd
+%webapp_unregister lighttpd %{_webapp}
+
 %triggerpostun -- %{name} < 1.14-2.1
 chown http:http %{_pkglibdir}/*.rrd
 
@@ -127,6 +135,7 @@ chown http:http %{_pkglibdir}/*.rrd
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mailgraph.css
 %dir %{_appdir}
 %attr(755,root,root) %{_appdir}/index.cgi
