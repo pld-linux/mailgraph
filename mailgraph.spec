@@ -3,7 +3,7 @@ Summary:	Simple mail statistics for Postfix
 Summary(pl.UTF-8):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.14
-Release:	2.9
+Release:	2.10
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://mailgraph.schweikert.ch/pub/%{name}-%{version}.tar.gz
@@ -52,7 +52,6 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	webapps
 Requires:	webserver
 Requires:	webserver(cgi)
-Requires:	webserver(expires)
 
 %description cgi
 CGI script for displaying mailgraph rrd data.

@@ -1,0 +1,10 @@
+--- mailgraph-1.14/mailgraph.cgi~	2010-07-13 17:10:13.986859625 +0300
++++ mailgraph-1.14/mailgraph.cgi	2010-07-13 17:17:28.163498031 +0300
+@@ -205,6 +205,7 @@
+ 
+ 	print "Content-type: image/png\n";
+ 	print "Content-length: ".((stat($file))[7])."\n";
++	print "Expires: ". (gmtime(time() + 60))." GMT\n";
+ 	print "\n";
+ 	open(IMG, $file) or die;
+ 	my $data;
