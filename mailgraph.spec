@@ -15,6 +15,7 @@ Source2:	%{name}.sysconfig
 Source3:	%{name}.conf
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-postfix_rbl.patch
+Patch2:		clamd-enable.patch
 URL:		http://mailgraph.schweikert.ch/
 BuildRequires:	perl-tools-pod
 BuildRequires:	rpm-perlprov
@@ -50,6 +51,7 @@ poczty wysłanej/odebranej i odbitej/odrzuconej.
 %setup	-q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 pod2man mailgraph.pl > mailgraph.1

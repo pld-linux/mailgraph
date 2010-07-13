@@ -1,0 +1,20 @@
+--- mailgraph-1.14/mailgraph.pl~	2010-07-13 10:37:45.000000000 +0300
++++ mailgraph-1.14/mailgraph.pl	2010-07-13 10:38:21.711839978 +0300
+@@ -821,12 +821,11 @@
+ 			event($time, 'virus');
+ 		}
+ 	}
+-	# uncommment for clamassassin:
+-	#elsif($prog eq 'clamd') {
+-	#	if($text =~ /^stream: .* FOUND$/) {
+-	#		event($time, 'virus');
+-	#	}
+-	#}
++	elsif($prog eq 'clamd') {
++		if($text =~ /^stream: .* FOUND$/) {
++			event($time, 'virus');
++		}
++	}
+ 	elsif ($prog eq 'smtp-vilter') {
+ 		if ($text =~ /clamd: found/) {
+ 			event($time, 'virus');
