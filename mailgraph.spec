@@ -3,17 +3,18 @@ Summary:	Simple mail statistics for Postfix
 Summary(pl.UTF-8):	Proste statystyki dla Postfiksa
 Name:		mailgraph
 Version:	1.14
-Release:	2.10
+Release:	3
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://mailgraph.schweikert.ch/pub/%{name}-%{version}.tar.gz
 # Source0-md5:	0f0ae91968ea7ae0c1d14985c560530b
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Source3:	%{name}.conf
+Source3:	%{name}-apache.conf
 Source4:	lighttpd.conf
 Source5:	http://oss.oetiker.ch/rrdtool/.pics/rrdtool.gif
 # Source5-md5:	51ab9e952ecfffa45b2c65eacc93f3a2
+Source6:	%{name}-httpd.conf
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-postfix_rbl.patch
 Patch2:		clamd-enable.patch
@@ -52,6 +53,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	webapps
 Requires:	webserver
 Requires:	webserver(cgi)
+Conflicts:	apache-base < 2.4.0-1
 
 %description cgi
 CGI script for displaying mailgraph rrd data.
@@ -80,7 +82,7 @@ touch $RPM_BUILD_ROOT/var/log/mailgraph.log
 
 # cgi app
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a %{SOURCE6} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 cp -a mailgraph.css $RPM_BUILD_ROOT%{_sysconfdir}/mailgraph.css
 cp -a %{SOURCE5} $RPM_BUILD_ROOT%{_appdir}
@@ -109,10 +111,10 @@ fi
 %triggerun cgi -- apache1 < 1.3.37-3, apache1-base
 %webapp_unregister apache %{_webapp}
 
-%triggerin cgi -- apache < 2.2.0, apache-base
+%triggerin cgi -- apache-base
 %webapp_register httpd %{_webapp}
 
-%triggerun cgi -- apache < 2.2.0, apache-base
+%triggerun cgi -- apache-base
 %webapp_unregister httpd %{_webapp}
 
 %triggerin cgi -- lighttpd
