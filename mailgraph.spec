@@ -23,7 +23,7 @@ BuildRequires:	perl-tools-pod
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
-Requires(triggerpostun):	sed >= 4.0
+Requires(postun):	sed >= 4.0
 Requires:	postfix
 Requires:	rc-scripts
 BuildArch:	noarch

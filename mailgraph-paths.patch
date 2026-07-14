@@ -1,7 +1,7 @@
 --- mailgraph-0.20/mailgraph.cgi	Tue Jul  2 11:14:49 2002
 +++ mailgraph-0.20.dzikus/mailgraph.cgi	Tue Jul 30 14:12:48 2002
 @@ -10,14 +10,14 @@
- my $VERSION = "1.12";
+ my $VERSION = "1.14";
  
  my $host = (POSIX::uname())[1];
 -my $scriptname = 'mailgraph.cgi';
@@ -18,7 +18,7 @@
 +my $tmp_dir = '/var/lib/mailgraph/img'; # temporary directory where to store the images
  
  my @graphs = (
- 	{ title => 'Day Graphs',   seconds => 3600*24,        },
+ 	{ title => 'Last Day',   seconds => 3600*24,        },
 --- mailgraph-1.2/mailgraph.pl.orig	Sun Jan  5 23:32:04 2003
 +++ mailgraph-1.2/mailgraph.pl	Tue Jan 28 12:21:21 2003
 @@ -304,8 +304,8 @@
@@ -42,7 +42,7 @@
  	print "  -y, --year         starting year of the log file (default: current year)\n";
  	print "      --host=HOST    use only entries for HOST (regexp) in syslog\n";
 @@ -374,7 +374,7 @@
- 	$rrd_virus	= $opt{rrd_name}."_virus.rrd" if defined $opt{rrd_name};
+ 
  	daemonize if $opt{daemon};
  
 -	my $logfile = defined $opt{logfile} ? $opt{logfile} : '/var/log/syslog';
